@@ -51,34 +51,34 @@ class RichTextArea extends WixComponent {
       }
     },
     rules: [
-        // Rule to insert a paragraph block if the document is empty.
-        {
-            match: (node) => {
-                return node.kind == 'document'
-            },
-            validate: (document) => {
-                return document.nodes.size ? null : true
-            },
-            normalize: (transform, document) => {
-                const block = Block.create(defaultBlock)
-                transform.insertNodeByKey(document.key, 0, block)
-            }
+      // Rule to insert a paragraph block if the document is empty.
+      {
+        match: node => {
+          return node.kind === 'document';
         },
-        // Rule to insert a paragraph below a void node (the image) if that node is
-        // the last one in the document.
-        {
-            match: (node) => {
-                return node.kind == 'document'
-            },
-            validate: (document) => {
-                const lastNode = document.nodes.last()
-                return lastNode && lastNode.isVoid ? true : null
-            },
-            normalize: (transform, document) => {
-                const block = Block.create(defaultBlock)
-                transform.insertNodeByKey(document.key, document.nodes.size, block)
-            }
+        validate: document => {
+          return document.nodes.size ? null : true;
+        },
+        normalize: (transform, document) => {
+          const block = Block.create(defaultBlock);
+          transform.insertNodeByKey(document.key, 0, block);
         }
+      },
+      // Rule to insert a paragraph below a void node (the image) if that node is
+      // the last one in the document.
+      {
+        match: node => {
+          return node.kind === 'document';
+        },
+        validate: document => {
+          const lastNode = document.nodes.last();
+          return lastNode && lastNode.isVoid ? true : null;
+        },
+        normalize: (transform, document) => {
+          const block = Block.create(defaultBlock);
+          transform.insertNodeByKey(document.key, document.nodes.size, block);
+        }
+      }
     ]
   };
   /* eslint-disable */
