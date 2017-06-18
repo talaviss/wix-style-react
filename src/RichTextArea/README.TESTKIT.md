@@ -37,9 +37,9 @@
    enzyme example
   ***************/
 
-   const dataHook = 'myDataHook';
-   const wrapper = mount(<div><RichTextArea dataHook={dataHook}/></div>);
-   const richTextAreaTestkitFactory = require('../../testkit/enzyme').richTextAreaTestkitFactory;
-   const driver = enzymeRichTextAreaTestkitFactory({ wrapper, dataHook});
+  const dataHook = 'myDataHook';
+  const wrapper = mount(<div><RichTextArea dataHook={dataHook}/></div>);
+  const richTextAreaTestkitFactory = require('../../testkit/enzyme').richTextAreaTestkitFactory;
+  const driver = enzymeRichTextAreaTestkitFactory({ wrapper, dataHook});
 
-   expect(driver.exists()).toBeTruthy();
+  expect(driver.exists()).toBeTruthy();
