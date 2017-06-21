@@ -37,6 +37,7 @@ function loadStories() {
   require('../stories/Tag');
   require('../stories/TextLink');
   require('../stories/TimeInput');
+  require('../stories/LanguagePicker');
   // require('../stories/Toast'); DEPRECATED
   require('../stories/ToggleSwitch');
   require('../stories/Tooltip/Core');
