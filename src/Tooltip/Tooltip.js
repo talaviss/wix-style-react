@@ -6,7 +6,7 @@ import styles from './Tooltip.scss';
 import Popper from 'popper.js';
 import classNames from 'classnames';
 
-const TooltipRefreshRate = 100;
+const TooltipRefreshRate = 20;
 
 export default class Tooltip extends WixComponent {
   static propTypes = {
