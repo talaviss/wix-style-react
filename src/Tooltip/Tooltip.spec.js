@@ -7,12 +7,12 @@ import {buttonTestkitFactory, tooltipTestkitFactory} from '../../testkit';
 import {tooltipTestkitFactory as enzymeTooltipTestkitFactory} from '../../testkit/enzyme';
 import {mount} from 'enzyme';
 import Button from '../../src/Button';
-import waitFor from 'wait-for-cond';
+import waitForCond from 'wait-for-cond';
 
 describe('Tooltip', () => {
 
   const createDriver = createDriverFactory(tooltipDriverFactory);
-  const _props = {showDelay: 5, hideDelay: 5, content: <div>I'm the content</div>};
+  const _props = {showDelay: 5, hideDelay: 5, content: <div>Some content</div>};
   const children = <div>foo children</div>;
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('Tooltip', () => {
     const driver = createDriver(<Tooltip {..._props}>{children}</Tooltip>);
     driver.mouseEnter();
     expect(driver.isShown()).toBeFalsy();
-    return waitFor(() => driver.isShown());
+    return waitFor.assert(() => expect(driver.isShown()).toBeTruthy());
   });
 
   it('should hide when mouse leaving', () => {
@@ -52,13 +52,16 @@ describe('Tooltip', () => {
     expect(driver.isShown()).toBeFalsy();
     driver.setProps({...props, active: true});
 
-    return waitFor(() => {
-      return driver.isShown();
-    }, 'should be shown')
+    return waitFor.assert(() => {
+      expect(driver.isShown()).toBeTruthy();
+    })
     .then(() => {
       driver.setProps({...props, active: false});
-      return !driver.isShown();
-    }, 'should not be shown');
+
+      return waitFor.assert(() => {
+          expect(driver.isShown()).toBeFalsy();
+      });
+    });
   });
 
   it('should test inner component', () => {
@@ -72,7 +75,8 @@ describe('Tooltip', () => {
     const driver = createDriver(<Tooltip showDelay={5} hideDelay={5} content={buttonContent}>{children}</Tooltip>);
     driver.mouseEnter();
     expect(driver.isShown()).toBeFalsy();
-    return waitFor(() => driver.isShown())
+
+    return waitFor.assert(() => expect(driver.isShown()).toBeTruthy())
     .then(() => {
       const buttonTestkit = buttonTestkitFactory({wrapper: driver.getTooltipWrapper(), dataHook});
       expect(buttonTestkit.getButtonTextContent()).toBe('Button content');
@@ -122,19 +126,19 @@ describe('Tooltip', () => {
   it('should support error theme', () => {
     const driver = createDriver(<Tooltip theme={'error'} {..._props}>{children}</Tooltip>);
     driver.mouseEnter();
-    return waitFor(() => driver.hasErrorTheme(), 'should display the error theme');
+    return waitFor.assert(() => expect(driver.hasErrorTheme()).toBeTruthy());
   });
 
   it('should support dark theme', () => {
     const driver = createDriver(<Tooltip theme={'dark'} {..._props}>{children}</Tooltip>);
     driver.mouseEnter();
-    return waitFor(() => driver.hasDarkTheme(), 'should display the dark theme');
+    return waitFor.assert(() => expect(driver.hasDarkTheme()).toBeTruthy());
   });
 
   it('should support light theme', () => {
     const driver = createDriver(<Tooltip theme={'light'} {..._props}>{children}</Tooltip>);
     driver.mouseEnter();
-    return waitFor(() => driver.hasLightTheme(), 'should display the light theme');
+    return waitFor.assert(() => expect(driver.hasLightTheme()).toBeTruthy());
   });
 
   it('should have children', () => {
@@ -145,8 +149,7 @@ describe('Tooltip', () => {
   it('should have a content', () => {
     const driver = createDriver(<Tooltip {..._props}>{children}</Tooltip>);
     driver.mouseEnter();
-    return waitFor(() => driver.getContent().indexOf('I\'m the content') !== -1,
-                   'should display the content');
+    return waitFor.assert(() => expect(driver.getContent()).toEqual('<div>Some content</div>'));
   });
 
   it('should cancel mouse leave, when followed by mouse enter immediately', () => {
@@ -176,7 +179,7 @@ describe('Tooltip', () => {
       const driver = createDriver(<Tooltip {...{..._props}}>{children}</Tooltip>);
       driver.mouseEnter();
 
-      return waitFor(() => driver.getPlacement() === 'top');
+      return waitFor.assert(() => expect(driver.getPlacement()).toEqual('top'));
     });
 
     ['top', 'bottom', 'left', 'right'].forEach(placement => {
@@ -222,7 +225,7 @@ describe('Tooltip', () => {
       const wrapper = mount(<Tooltip dataHook={dataHook} {..._props} hideDelay={1000}>{children}</Tooltip>);
       const driver = enzymeTooltipTestkitFactory({wrapper, dataHook});
       driver.mouseEnter();
-      return waitFor(() => driver.isShown())
+      return waitFor.assert(() => expect(driver.isShown()).toBeTruthy())
       .then(() => {
         wrapper.unmount();
         expect(driver.isShown()).toBeFalsy();
@@ -319,3 +322,11 @@ function resolveIn(timeout) {
     }, timeout);
   });
 }
+
+function waitFor(predicate, msg) {
+  return waitForCond(predicate, 2000, msg);
+}
+
+waitFor.assert = function (fn) {
+  return waitForCond.assert(fn, 2000);
+};
