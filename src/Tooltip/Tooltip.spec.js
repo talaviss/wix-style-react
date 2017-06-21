@@ -2,7 +2,6 @@ import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import tooltipDriverFactory from './Tooltip.driver';
 import Tooltip from './Tooltip';
-import TooltipContent from './TooltipContent';
 import {createDriverFactory} from '../test-common';
 import {buttonTestkitFactory, tooltipTestkitFactory} from '../../testkit';
 import {tooltipTestkitFactory as enzymeTooltipTestkitFactory} from '../../testkit/enzyme';
@@ -13,7 +12,7 @@ import waitFor from 'wait-for-cond';
 describe('Tooltip', () => {
 
   const createDriver = createDriverFactory(tooltipDriverFactory);
-  const _props = {showDelay: 5, hideDelay: 5, content: <TooltipContent children={'I\'m the content'}/>};
+  const _props = {showDelay: 5, hideDelay: 5, content: <div>I'm the content</div>};
   const children = <div>foo children</div>;
 
   beforeEach(() => {
