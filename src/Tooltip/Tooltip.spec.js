@@ -85,6 +85,22 @@ describe('Tooltip', () => {
     }, 100);
   });
 
+  it('custom mode - mouse enter does not hide', () => {
+    const driver = createDriver(
+      <Tooltip {...{..._props, showTrigger: 'custom', hideTrigger: 'custom'}} active>
+        <input/>
+      </Tooltip>
+    );
+
+    expect(driver.isShown()).toBeTruthy();
+
+    driver.mouseEnter();
+
+    setTimeout(() => {
+      expect(driver.isShown()).toBeTruthy();
+    }, 300);
+  });
+
   it('focus and blur triggers', () => {
     const driver = createDriver(
       <Tooltip {...{..._props, showTrigger: 'focus', hideTrigger: 'blur'}}>

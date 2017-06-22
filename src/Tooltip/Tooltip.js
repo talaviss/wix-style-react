@@ -169,7 +169,7 @@ export default class Tooltip extends WixComponent {
     const {showTrigger, hideTrigger} = this.props;
     const {active} = this.state;
 
-    if (showTrigger === hideTrigger) {
+    if (showTrigger === hideTrigger && showTrigger === triggerType) {
       if (active) {
         this.handleHideTrigger();
       } else {
