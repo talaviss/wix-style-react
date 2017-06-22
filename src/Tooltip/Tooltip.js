@@ -166,11 +166,11 @@ export default class Tooltip extends WixComponent {
   }
 
   handleToggleTrigger(originalCallback = _.noop, triggerType) {
-    const {active} = this.state;
+    const {showTrigger, hideTrigger} = this.props;
 
-    if (active) {
+    if (hideTrigger === triggerType) {
       this.handleHideTrigger(triggerType);
-    } else {
+    } else if (showTrigger === triggerType) {
       this.handleShowTrigger(triggerType);
     }
 
@@ -178,15 +178,11 @@ export default class Tooltip extends WixComponent {
   }
 
   handleHideTrigger(triggerType) {
-    if (this.props.hideTrigger === triggerType) {
-      this.handleToggleWithDelay(false);
-    }
+    this.handleToggleWithDelay(false);
   }
 
   handleShowTrigger(triggerType) {
-    if (this.props.showTrigger === triggerType) {
-      this.handleToggleWithDelay(true);
-    }
+    this.handleToggleWithDelay(true);
   }
 
   handleToggleWithDelay(toggle) {
