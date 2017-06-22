@@ -35,13 +35,11 @@ describe('Tooltip', () => {
     const driver = createDriver(<Tooltip {..._props}>{children}</Tooltip>);
     driver.mouseEnter();
     expect(driver.isShown()).toBeFalsy();
-    return resolveIn(30).then(() => {
-      expect(driver.isShown()).toBeTruthy();
-      driver.mouseLeave();
-      return resolveIn(30).then(() => {
-        expect(driver.isShown()).toBeFalsy();
-      });
-    });
+
+    return waitFor
+      .assert(() => expect(driver.isShown()).toBeTruthy())
+      .then(() => driver.mouseLeave())
+      .then(() => waitFor.assert(() => expect(driver.isShown()).toBeFalsy()));
   });
 
   it('click triggers', () => {
@@ -230,9 +228,8 @@ describe('Tooltip', () => {
     driver.mouseEnter();
     driver.mouseLeave();
     driver.mouseEnter();
-    return resolveIn(30).then(() => {
-      expect(driver.isShown()).toBe(true);
-    });
+
+    return waitFor.assert(() => expect(driver.isShown()).toBe(true));
   });
 
   it('should call onShow when tooltip is shown', () => {
@@ -242,9 +239,7 @@ describe('Tooltip', () => {
     driver.mouseEnter();
 
     expect(onShow).not.toHaveBeenCalled();
-    return resolveIn(30).then(() => {
-      expect(onShow).toHaveBeenCalled();
-    });
+    return waitFor.assert(() => expect(onShow).toHaveBeenCalled());
   });
 
   describe('placement attribute', () => {
@@ -260,9 +255,7 @@ describe('Tooltip', () => {
         const driver = createDriver(<Tooltip {...{..._props}} placement={placement}>{children}</Tooltip>);
         driver.mouseEnter();
 
-        return resolveIn(30).then(() => {
-          expect(driver.getPlacement()).toBe(placement);
-        });
+        return waitFor.assert(() => expect(driver.getPlacement()).toBe(placement));
       });
     });
 
@@ -286,9 +279,7 @@ describe('Tooltip', () => {
       const driver = tooltipTestkitFactory({wrapper, dataHook});
       driver.mouseEnter();
       expect(driver.isShown()).toBeFalsy();
-      return resolveIn(30).then(() => {
-        expect(driver.isShown()).toBeTruthy();
-      });
+      return waitFor.assert(() => expect(driver.isShown()).toBeTruthy());
     });
   });
 
@@ -299,9 +290,7 @@ describe('Tooltip', () => {
       const driver = enzymeTooltipTestkitFactory({wrapper, dataHook});
       driver.mouseEnter();
       expect(driver.isShown()).toBeFalsy();
-      return resolveIn(30).then(() => {
-        expect(driver.isShown()).toBeTruthy();
-      });
+      return waitFor.assert(() => expect(driver.isShown()).toBeTruthy());
     });
 
     it.skip('should remove a tooltip immediately once the component is destroyed', () => {
@@ -317,14 +306,6 @@ describe('Tooltip', () => {
     });
   });
 });
-
-function resolveIn(timeout) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({});
-    }, timeout);
-  });
-}
 
 function waitFor(predicate, msg) {
   return waitForCond(predicate, 2000, msg);
