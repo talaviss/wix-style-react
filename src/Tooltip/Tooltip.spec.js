@@ -44,6 +44,63 @@ describe('Tooltip', () => {
     });
   });
 
+  it('click triggers', () => {
+    const driver = createDriver(<Tooltip {...{..._props, showTrigger: 'click', hideTrigger: 'click'}}>{children}</Tooltip>);
+    driver.click();
+
+    return waitFor.assert(() => expect(driver.isShown()).toBeTruthy())
+      .then(() => {
+        driver.click();
+        return waitFor.assert(() => expect(driver.isShown()).toBeFalsy());
+      });
+  });
+
+  it('show on focus, hide on blur', () => {
+    const driver = createDriver(
+      <Tooltip {...{..._props, showTrigger: 'focus', hideTrigger: 'blur'}}>
+        <input/>
+      </Tooltip>
+    );
+
+    driver.focus();
+
+    return waitFor.assert(() => expect(driver.isShown()).toBeTruthy())
+      .then(() => {
+        driver.blur();
+        return waitFor.assert(() => expect(driver.isShown()).toBeFalsy());
+      });
+  });
+
+  it('hover trigger is disabled in click mode', () => {
+    const driver = createDriver(
+      <Tooltip {...{..._props, showTrigger: 'click', hideTrigger: 'click'}}>
+        {children}
+      </Tooltip>
+    );
+
+    driver.mouseEnter();
+
+    setTimeout(() => {
+      expect(driver.isShown()).toBeFalsy();
+    }, 100);
+  });
+
+  it('focus and blur triggers', () => {
+    const driver = createDriver(
+      <Tooltip {...{..._props, showTrigger: 'focus', hideTrigger: 'blur'}}>
+        <input/>
+      </Tooltip>
+    );
+
+    driver.focus();
+
+    return waitFor.assert(() => expect(driver.isShown()).toBeTruthy())
+      .then(() => {
+        driver.blur();
+        return waitFor.assert(() => expect(driver.isShown()).toBeFalsy());
+      });
+  });
+
   it('should hide tooltip when using custom triggers', () => {
     const props = {..._props, hideTrigger: 'custom', showTrigger: 'custom'};
     const driver = createDriver(<Tooltip {...props}>{children}</Tooltip>);
@@ -59,7 +116,7 @@ describe('Tooltip', () => {
       driver.setProps({...props, active: false});
 
       return waitFor.assert(() => {
-          expect(driver.isShown()).toBeFalsy();
+        expect(driver.isShown()).toBeFalsy();
       });
     });
   });

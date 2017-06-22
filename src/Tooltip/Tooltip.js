@@ -165,23 +165,30 @@ export default class Tooltip extends WixComponent {
     this.setState({popperData: data});
   }
 
-  handleToggleTrigger(originalCallback = _.noop, triggerType) {
+  handleTrigger(originalCallback = _.noop, triggerType) {
     const {showTrigger, hideTrigger} = this.props;
+    const {active} = this.state;
 
-    if (hideTrigger === triggerType) {
-      this.handleHideTrigger(triggerType);
+    if (showTrigger === hideTrigger) {
+      if (active) {
+        this.handleHideTrigger();
+      } else {
+        this.handleShowTrigger();
+      }
     } else if (showTrigger === triggerType) {
-      this.handleShowTrigger(triggerType);
+      this.handleShowTrigger();
+    } else if (hideTrigger === triggerType) {
+      this.handleHideTrigger();
     }
 
     originalCallback();
   }
 
-  handleHideTrigger(triggerType) {
+  handleHideTrigger() {
     this.handleToggleWithDelay(false);
   }
 
-  handleShowTrigger(triggerType) {
+  handleShowTrigger() {
     this.handleToggleWithDelay(true);
   }
 
@@ -279,11 +286,11 @@ export default class Tooltip extends WixComponent {
     active = active && !disabled;
 
     const clonedTarget = React.cloneElement(this.props.children, {
-      onMouseEnter: () => this.handleToggleTrigger(this.props.children.props.onMouseEnter, 'mouseenter'),
-      onMouseLeave: () => this.handleToggleTrigger(this.props.children.props.onMouseLeave, 'mouseleave'),
-      onClick: () => this.handleToggleTrigger(this.props.children.props.onClick, 'click'),
-      onFocus: () => this.handleToggleTrigger(this.props.children.props.onFocus, 'focus'),
-      onBlur: () => this.handleToggleTrigger(this.props.children.props.onBlur, 'blur'),
+      onMouseEnter: () => this.handleTrigger(this.props.children.props.onMouseEnter, 'mouseenter'),
+      onMouseLeave: () => this.handleTrigger(this.props.children.props.onMouseLeave, 'mouseleave'),
+      onClick: () => this.handleTrigger(this.props.children.props.onClick, 'click'),
+      onFocus: () => this.handleTrigger(this.props.children.props.onFocus, 'focus'),
+      onBlur: () => this.handleTrigger(this.props.children.props.onBlur, 'blur'),
     });
 
     const popperStyle = this.getPopperStyle();
