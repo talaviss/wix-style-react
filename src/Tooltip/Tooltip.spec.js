@@ -78,9 +78,7 @@ describe('Tooltip', () => {
 
     driver.mouseEnter();
 
-    setTimeout(() => {
-      expect(driver.isShown()).toBeFalsy();
-    }, 100);
+    return waitFor.assertHold(() => expect(driver.isShown()).toBeFalsy(), 300);
   });
 
   it('custom mode - mouse enter does not hide', () => {
@@ -94,9 +92,7 @@ describe('Tooltip', () => {
 
     driver.mouseEnter();
 
-    setTimeout(() => {
-      expect(driver.isShown()).toBeTruthy();
-    }, 300);
+    return waitFor.assertHold(() => expect(driver.isShown()).toBeTruthy());
   });
 
   it('focus and blur triggers', () => {
@@ -259,15 +255,12 @@ describe('Tooltip', () => {
       });
     });
 
-    it('show with delay and immediately hide', done => {
+    it('show with delay and immediately hide', () => {
       const driver = createDriver(<Tooltip {...{..._props, hideDelay: 0, showDelay: 50}}>{children}</Tooltip>);
       driver.mouseEnter();
       driver.mouseLeave();
 
-      setTimeout(() => {
-        expect(driver.isShown()).toBeFalsy();
-        done();
-      }, 100);
+      return waitFor.assertHold(() => expect(driver.isShown()).toBeFalsy());
     });
   });
 
@@ -313,4 +306,8 @@ function waitFor(predicate, msg) {
 
 waitFor.assert = function (fn) {
   return waitForCond.assert(fn, 2000);
+};
+
+waitFor.assertHold = function (fn) {
+  return waitForCond.assertHold(fn, 500);
 };
