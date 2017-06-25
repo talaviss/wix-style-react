@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import Tag from './Tag';
 import tagDriverFactory from './Tag.driver';
 import {createDriverFactory} from '../test-common';
@@ -37,8 +37,13 @@ describe('Tag', () => {
     expect(driver.isRemovable()).toBeFalsy();
   });
 
+  it('should have not remove button if disabled is true', () => {
+    const driver = createDriver(<Tag id={id} disabled>{label}</Tag>);
+    expect(driver.isRemovable()).toBeFalsy();
+  });
+
   it('should have disabled class if disabled is true', () => {
-    const driver = createDriver(<Tag disabled={true}>{label}</Tag>);
+    const driver = createDriver(<Tag id={id} disabled>{label}</Tag>);
     expect(driver.isDisabled()).toBeTruthy();
   });
 

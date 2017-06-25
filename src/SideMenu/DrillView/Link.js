@@ -1,11 +1,11 @@
 import React from 'react';
-import {node, bool, string} from 'prop-types';
-import SideMenu from '../index';
+import {node, bool} from 'prop-types';
+import NavigationLinkLayout from '../core/navigation/LinkLayout';
 
-const Link = ({children, to, isActive, ...rest}) => (
-  <SideMenu.NavigationLink href={to} isActive={isActive} {...rest}>
+const Link = ({children, isActive, ...rest}) => (
+  <NavigationLinkLayout isActive={isActive} {...rest}>
     {children}
-  </SideMenu.NavigationLink>
+  </NavigationLinkLayout>
 );
 
 Link.defaultProps = {
@@ -13,7 +13,6 @@ Link.defaultProps = {
 };
 
 Link.propTypes = {
-  to: string.isRequired,
   children: node.isRequired,
   isActive: bool
 };

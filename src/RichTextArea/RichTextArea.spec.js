@@ -3,8 +3,23 @@ import {createDriverFactory} from '../test-common';
 import richTextAreaDriverFactory from './RichTextArea.driver';
 import RichTextArea from './RichTextArea';
 
+const mockGetSelection = () => {
+  const original = window.getSelection;
+  const fn = () => ({});
+  fn.restore = () => window.getSelection = original;
+  window.getSelection = fn;
+};
+
 describe('RichTextArea', () => {
   let currentValue;
+
+  beforeEach(() => {
+    mockGetSelection();
+  });
+
+  afterEach(() => {
+    window.getSelection.restore();
+  });
 
   it('should render value as text', () => {
     const text = 'text content';
@@ -121,6 +136,12 @@ describe('RichTextArea', () => {
       expect(driver.isImageExist()).toBeFalsy();
       driver.clickImageButton();
       expect(driver.isImageExist()).toBeTruthy();
+    });
+
+    it('insert a default block after inserting an image, given an empty document', () => {
+      const driver = createComponent({onImageRequest});
+      driver.clickImageButton();
+      expect(driver.isDefaultBlockExist()).toBeTruthy();
     });
   });
 

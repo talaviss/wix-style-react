@@ -21,10 +21,11 @@ class InputWithTags extends React.Component {
   }
 
   render() {
-    const {tags, onRemoveTag, placeholder, error, ...inputProps} = this.props;
+    const {tags, onRemoveTag, placeholder, error, disabled, ...inputProps} = this.props;
 
     const className = classNames({
       [styles.tagsContainer]: true,
+      [styles.disabled]: disabled,
       [styles.error]: error,
     });
 
@@ -33,16 +34,17 @@ class InputWithTags extends React.Component {
     return (
       <div className={className} onClick={() => this.input.focus()}>
 
-        {tags.map(({label, ...rest}) => <Tag key={rest.id} onRemove={onRemoveTag} {...rest}>{label}</Tag>)}
+        {tags.map(({label, ...rest}) => <Tag key={rest.id} disabled={disabled} onRemove={onRemoveTag} {...rest}>{label}</Tag>)}
         <span className={styles.input} data-hook="inner-input-with-tags">
           <div className={styles.hiddenDiv} style={{fontSize}}>
             {this.state.inputValue}
           </div>
+
           <Input
             ref={input => this.input = input}
             placeholder={tags.length === 0 ? placeholder : ''}
             {...desiredProps}
-            width="100px"
+            disabled={disabled}
             onChange={e => {
               this.setState({inputValue: e.target.value});
               desiredProps.onChange && desiredProps.onChange(e);
@@ -73,6 +75,7 @@ InputWithTags.propTypes = {
   placeholder: PropTypes.string,
   onFocus: PropTypes.func,
   autoFocus: PropTypes.bool,
+  disabled: PropTypes.bool,
   error: PropTypes.bool
 };
 

@@ -1,9 +1,8 @@
 import React, {Children} from 'react';
-import {string, node} from 'prop-types';
 import WixComponent from '../../BaseComponents/WixComponent';
-import SideMenu from '../index';
-import {SlideAnimation} from '../../Animations';
-import {SlideDirection} from '../../Animations/SlideAnimation';
+import {string, node, bool} from 'prop-types';
+import SideMenu from '../core/SideMenu';
+import SlideAnimation, {SlideDirection} from '../../Animations/SlideAnimation';
 import styles from './DrillView.scss';
 
 class SideMenuDrill extends WixComponent {
@@ -41,8 +40,9 @@ class SideMenuDrill extends WixComponent {
     }
 
     // returning to an already selected menu item (force nav)
-    if (event && event.target.dataset.menuKey === selectedItemMenuId) { //eslint-disable-line no-restricted-globals
+    if (this.lastClickedMenuKey === selectedItemMenuId) {
       this.navigateToMenu(selectedItemMenuId, SlideDirection.left);
+      this.lastClickedMenuKey = null;
     }
 
     if (this.state.selectedItemMenuId === selectedItemMenuId) {
@@ -61,11 +61,26 @@ class SideMenuDrill extends WixComponent {
     this.setState({currentMenuId: nextMenuId, previousMenuId, showMenuA, slideDirection});
   }
 
+  clickFirstClickableChild(item, event) {
+    let found = false;
+    if (item.props.onClick) {
+      item.props.onClick(event);
+      return true;
+    }
+
+    Children.forEach(item.props.children, child => {
+      if (!found && child.props) {
+        found = this.clickFirstClickableChild(child, event);
+      }
+    });
+    return found;
+  }
+
   selectFirstLinkChild(menu, event) {
     let found = false;
     Children.forEach(menu.props.children, child => {
       if (!found && child.type === SideMenuDrill.Link) {
-        child.props.onClick && child.props.onClick(event);
+        this.clickFirstClickableChild(child, event);
         found = true;
       }
 
@@ -79,10 +94,7 @@ class SideMenuDrill extends WixComponent {
     const defaultSubMenProps = {
       isOpen: false,
       onSelectHandler: event => {
-        if (event && event.target && event.target.dataset) {
-          event.target.dataset.menuKey = menu.props.menuKey;
-        }
-
+        this.lastClickedMenuKey = menu.props.menuKey;
         this.selectFirstLinkChild(menu, event);
       },
       onBackHandler: () => {
@@ -120,7 +132,7 @@ class SideMenuDrill extends WixComponent {
 
   processChildren(menu, state, parentMenuKey) {
     const childrenClone = Children.map(menu.props.children, child => {
-      if (child.props && child.props.children) {
+      if (child && child.props && child.props.children) {
         const menuKey = menu.props.menuKey || parentMenuKey;
         return this.processChildren(child, state, menuKey);
       }
@@ -158,7 +170,7 @@ class SideMenuDrill extends WixComponent {
     const menuB = menuBId && menus[menuBId];
 
     return (
-      <SideMenu dataHook="drill-view">
+      <SideMenu dataHook="drill-view" inFlex={this.props.inFlex}>
         <div className={styles.drillViewContainer}>
           <SlideAnimation direction={this.state.slideDirection} animateAppear={false}>
             { showMenuA ? this.renderMenu(menuA) : null }
@@ -173,10 +185,12 @@ class SideMenuDrill extends WixComponent {
 }
 
 SideMenuDrill.defaultProps = {
+  inFlex: false,
   menuKey: 'root'
 };
 
 SideMenuDrill.propTypes = {
+  inFlex: bool,
   menuKey: string,
   children: node
 };

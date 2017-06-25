@@ -12,7 +12,7 @@ GEOCODE_RESULT.geometry = {
   }
 };
 
-class GmapsTestClient {
+export class GmapsTestClient {
   autocomplete({request}) {
 
     if (request.input === 'dontfind') {
@@ -99,7 +99,7 @@ describe('GoogleAddressInput', () => {
 
       const component = createShallow({Client: GmapsTestClient, countryCode: 'XX'});
       const event = {target: {value: 'Hatomer 49'}};
-      component.find('InputWithOptions').props().onChange(event);
+      component.find('InputWithOptions').props().onInput(event);
 
       // Defer to make sure all promises run
       _.defer(() => {

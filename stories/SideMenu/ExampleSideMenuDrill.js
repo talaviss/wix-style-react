@@ -14,8 +14,8 @@ let counter = 3;
 
 const items = [
   { type: 'link', to: '//wix.com', title: 'link #0_1' },
-  { type: 'link', to: '//wix.com', title: 'link #0_2' },
-  { type: 'menu', title: 'Sub Menu #1', items: [
+  { type: 'link', to: '//wix.com', title: 'link #0_2', badge: true },
+  { type: 'menu', title: 'Sub Menu #1', badge: true, items: [
     { type: 'link', to: '//wix.com', title: 'link #1_1' },
     { type: 'link', to: '//wix.com', title: 'link #1_2' },
     { type: 'link', to: '//wix.com', title: 'link #1_3' }
@@ -60,15 +60,20 @@ class ExampleSideMenuDrill extends React.Component {
 
   renderLink(link) {
     return (
-      <SideMenuDrill.Link key={link.title} to={link.to} onClick={e => this.onMenuSelected(e, link)} isActive={link.isActive}>
-        {link.title}
+      <SideMenuDrill.Link key={link.title} isActive={link.isActive}>
+        <a href={link.to} onClick={e => this.onMenuSelected(e, link)}>
+          {link.title}
+          {link.badge && <SideMenu.NavigationBadge/>}
+        </a>
       </SideMenuDrill.Link>
     );
   }
 
   renderMenu(menu) {
+    const showCategory = menu.title !== 'Sub Menu #3';
+
     return (
-      <SideMenuDrill.SubMenu key={menu.title} menuKey={menu.title} title={menu.title}>
+      <SideMenuDrill.SubMenu key={menu.title} menuKey={menu.title} title={menu.title} showCategory={showCategory} withBadge={menu.badge}>
         <SideMenu.Header>
           <div onClick={() => console.log('Header clicked')}>
             <TrashIcon size="5em"/>
@@ -108,38 +113,40 @@ class ExampleSideMenuDrill extends React.Component {
 
     return (
       <div>
-        <div style={{width: 220, height: 700}}>
-          <SideMenuDrill>
-            <SideMenu.Header>
-              <div onClick={() => console.log('Header clicked')}>
-                <TrashIcon size="5em"/>
-                <h2 style={{color: '#fff'}}>My Application</h2>
-              </div>
-            </SideMenu.Header>
-            {this.renderNavigation(items)}
-            <SideMenu.Promotion>
-              <Button theme="fullpurple" onClick={() => console.log('Promotion button clicked!')}>
-                Buy 1 for price of 2!
-              </Button>
-            </SideMenu.Promotion>
-            <SideMenu.Footer>
-              <SideMenu.FooterLink
-                href="https://support.wix.com/"
-                target="_blank"
-                icon={<HelpIcon size="1em"/>}
-                >
-                Help Me!
-              </SideMenu.FooterLink>
+        <div style={{width: 220, height: 700, display: 'flex'}}>
+          <div style={{display: 'flex', flexGrow: 1}}>
+            <SideMenuDrill inFlex>
+              <SideMenu.Header>
+                <div onClick={() => console.log('Header clicked')}>
+                  <TrashIcon size="5em"/>
+                  <h2 style={{color: '#fff'}}>My Application</h2>
+                </div>
+              </SideMenu.Header>
+              {this.renderNavigation(items)}
+              <SideMenu.Promotion>
+                <Button theme="fullpurple" onClick={() => console.log('Promotion button clicked!')}>
+                  Buy 1 for price of 2!
+                </Button>
+              </SideMenu.Promotion>
+              <SideMenu.Footer>
+                <SideMenu.FooterLink
+                  href="https://support.wix.com/"
+                  target="_blank"
+                  icon={<HelpIcon size="1em"/>}
+                  >
+                  Help Me!
+                </SideMenu.FooterLink>
 
-              <SideMenu.FooterTinyLink
-                href="https://support.wix.com/en/article/wix-seo-wiz-suggestions-and-feedback"
-                target="_blank"
-                icon={<div style={{marginTop: 2}}><ChatIcon size="1em"/></div>}
-                tooltip="Hey, come talk to me!"
-                onClick={() => console.log('clicked on tiny link yay!')}
-                />
-            </SideMenu.Footer>
-          </SideMenuDrill>
+                <SideMenu.FooterTinyLink
+                  href="https://support.wix.com/en/article/wix-seo-wiz-suggestions-and-feedback"
+                  target="_blank"
+                  icon={<div style={{marginTop: 2}}><ChatIcon size="1em"/></div>}
+                  tooltip="Hey, come talk to me!"
+                  onClick={() => console.log('clicked on tiny link yay!')}
+                  />
+              </SideMenu.Footer>
+            </SideMenuDrill>
+          </div>
         </div>
         <Button onClick={() => this.addItem()}>Add link to root menu</Button>
       </div>

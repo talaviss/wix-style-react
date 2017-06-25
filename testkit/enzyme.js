@@ -105,6 +105,9 @@ export const headerTestkitFactory = enzymeTestkitFactoryCreator(headerDriverFact
 import richTextAreaCompositeDriverFactory from '../src/RichTextAreaComposite/RichTextAreaComposite.driver';
 export const richTextAreaCompositeTestkitFactory = enzymeTestkitFactoryCreator(richTextAreaCompositeDriverFactory);
 
+import richTextAreaDriverFactory from '../src/RichTextArea/RichTextArea.driver';
+export const richTextAreaTestkitFactory = enzymeTestkitFactoryCreator(richTextAreaDriverFactory);
+
 import modalDriverFactory from '../src/Modal/Modal.driver';
 export const modalTestkitFactory = enzymeTestkitFactoryCreator(modalDriverFactory);
 
@@ -130,3 +133,9 @@ export const textTestkitFactory = enzymeTestkitFactoryCreator(textDriverFactory)
 
 import dividerDriverFactory from '../src/Viewer/Divider/Divider.driver';
 export const dividerTestkitFactory = enzymeTestkitFactoryCreator(dividerDriverFactory);
+
+import sideMenuDriverFactory from '../src/SideMenu/core/SideMenu.driver';
+export const sideMenuTestkitFactory = enzymeTestkitFactoryCreator(sideMenuDriverFactory);
+
+import sideMenuDrillDriverFactory from '../src/SideMenu/DrillView/DrillView.driver';
+export const sideMenuDrillTestkitFactory = enzymeTestkitFactoryCreator(sideMenuDrillDriverFactory);

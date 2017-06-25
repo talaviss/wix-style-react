@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 
 const messageBoxFunctionalLayoutDriverFactory = ({element, wrapper, component}) => {
   const confirmationButton = () => element.querySelector('[data-hook="confirmation-button"]');
@@ -11,6 +11,7 @@ const messageBoxFunctionalLayoutDriverFactory = ({element, wrapper, component}) 
     exists: () => !!(element),
     getConfirmationButtonText: () => confirmationButton().textContent,
     clickOnConfirmationButton: () => ReactTestUtils.Simulate.click(confirmationButton()),
+    getConfirmationButton: confirmationButton,
     getCancellationButton: cancellationButton,
     getHeaderCloseButton: headerCloseButton,
     getCancellationButtonText: () => cancellationButton().textContent,

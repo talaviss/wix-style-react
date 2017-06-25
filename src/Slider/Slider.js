@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Rcslider from 'rc-slider';
+import {Range} from 'rc-slider';
 import uniqueId from 'lodash.uniqueid';
 import SliderHandle from './SliderHandle';
 import classNames from 'classnames';
@@ -47,14 +47,13 @@ export default class Slider extends Component {
     const marks = this.props.displayMarks ? this.getMarks() : {};
     const {dataHook} = this.props;
     return (
-      <div className={classNames('wix-slider', {rtl: this.props.rtl})} id={this.props.id} dataHook={dataHook}>
-        <Rcslider
-          handle={<SliderHandle/>}
+      <div className={classNames('wix-slider', {rtl: this.props.rtl})} id={this.props.id} data-hook={dataHook}>
+        <Range
+          handle={props => (<SliderHandle key={props.index} {...props}/>)}
           min={this.props.min}
           max={this.props.max}
           value={this.props.value}
           marks={marks}
-          range={true}
           step={this.props.step}
           onChange={this.props.onChange}
           onAfterChange={this.props.onAfterChange}

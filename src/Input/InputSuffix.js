@@ -28,16 +28,17 @@ const getVisibleSuffixCount = args =>
     .length;
 
 const InputSuffix = ({theme, errorMessage, error, disabled, help, helpMessage, onIconClicked,
-      magnifyingGlass, isClearButtonVisible, onClear, menuArrow, unit, suffix, focused
+      magnifyingGlass, isClearButtonVisible, onClear, menuArrow, unit, suffix, focused,
+      tooltipPlacement, onTooltipShow
 }) => {
 
   const suffixes = [
     {
-      component: () => <ThemedInputErrorSuffix theme={theme} focused={focused} errorMessage={errorMessage}/>,
+      component: () => <ThemedInputErrorSuffix theme={theme} focused={focused} errorMessage={errorMessage} tooltipPlacement={tooltipPlacement} onTooltipShow={onTooltipShow}/>,
       isVisible: suffixRules.inputErrorSuffix({error, disabled})
     },
     {
-      component: () => <ThemedInputHelpSuffix theme={theme} help={help} helpMessage={helpMessage}/>,
+      component: () => <ThemedInputHelpSuffix theme={theme} help={help} helpMessage={helpMessage} tooltipPlacement={tooltipPlacement} onTooltipShow={onTooltipShow}/>,
       isVisible: suffixRules.inputHelpSuffix({help, disabled})
     },
     {
@@ -90,12 +91,12 @@ InputSuffix.propTypes = {
     component: PropTypes.func.isRequired,
     isVisible: PropTypes.bool.isRequired
   })),
-  theme: PropTypes.oneOf(['normal', 'paneltitle', 'material', 'amaterial']),
-  errorMessage: PropTypes.string.isRequired,
+  theme: PropTypes.oneOf(['normal', 'paneltitle', 'material', 'amaterial', 'flat', 'flatdark']),
+  errorMessage: PropTypes.node.isRequired,
   error: PropTypes.bool,
   disabled: PropTypes.bool,
   help: PropTypes.bool,
-  helpMessage: PropTypes.string,
+  helpMessage: PropTypes.node,
   onIconClicked: PropTypes.func,
   magnifyingGlass: PropTypes.bool,
   isClearButtonVisible: PropTypes.bool,
@@ -104,6 +105,8 @@ InputSuffix.propTypes = {
   unit: PropTypes.string,
   suffix: PropTypes.node,
   focused: PropTypes.bool,
+  tooltipPlacement: PropTypes.string,
+  onTooltipShow: PropTypes.func
 };
 
 export default InputSuffix;

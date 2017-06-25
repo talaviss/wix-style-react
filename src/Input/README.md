@@ -7,7 +7,7 @@
 | propName | propType | defaultValue | isRequired | description |
 |----------|----------|--------------|------------|-------------|
 | value | string | - | - | Inputs value |
-| theme | string | normal | - | The theme of the input, can be one of `normal`, `paneltitle` |
+| theme | string | normal | - | The theme of the input, can be one of `normal`, `paneltitle`, `material`, `amaterial`, `flat`, `flatdark` |
 | defaultValue | string | - | - | Default value for those who wants to use this component un-controlled |
 | tabIndex  | number | - | - | Standard component tabIndex |
 | placeholder  | string | - | - | Placeholder to display |
@@ -40,6 +40,8 @@
 | roundInput | bool | false | - | When set to true, this input will be rounded |
 | noLeftBorderRadius | bool | false | - | When set to true, this input will have no rounded corners on its left |
 | noRightBorderRadius | bool | false | - | When set to true, this input will have no rounded corners on its right |
+| tooltipPlacement | [top, bottom, right, left] | - | - | Placement of the error and help tooltips (supported only for amaterial them for now) |
+| onTooltipShow | func | - | - | onShow prop for the error and help tooltips (supported only for amaterial them for now)|
 
 ## Functions
 

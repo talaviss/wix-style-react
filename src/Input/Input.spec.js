@@ -1,33 +1,78 @@
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
 import inputDriverFactory from './Input.driver';
 import Input from '.';
 import sinon from 'sinon';
 import {createDriverFactory} from '../test-common';
 import {inputTestkitFactory, tooltipTestkitFactory} from '../../testkit';
 import {inputTestkitFactory as enzymeInputTestkitFactory} from '../../testkit/enzyme';
-import {mount} from 'enzyme';
+import {isTestkitExists, isEnzymeTestkitExists} from '../../testkit/test-common';
 
 describe('Input', () => {
   const createDriver = createDriverFactory(inputDriverFactory);
 
   describe('test tooltip', () => {
-    it('should get the tooltip for further tests', () => {
+    const resolveIn = timeout =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve({});
+        }, timeout);
+      });
+
+    it('should dispaly the error tooltip on hover', () => {
       const driver = createDriver(<Input error errorMessage="I'm the error message"/>);
       const dataHook = driver.getTooltipDataHook();
       const wrapper = driver.getTooltipElement();
       const tooltipDriver = tooltipTestkitFactory({wrapper, dataHook});
       tooltipDriver.mouseEnter();
 
-      const resolveIn = timeout =>
-        new Promise(resolve => {
-          setTimeout(() => {
-            resolve({});
-          }, timeout);
-        });
-
       return resolveIn(500).then(() => {
         expect(tooltipDriver.getContent()).toBe('I\'m the error message');
+      });
+    });
+
+    describe('tooltipPlacement attribute', () => {
+      ['top', 'bottom', 'left', 'right'].forEach(placement => {
+        it(`should have a tooltip positioned to the ${placement}`, () => {
+          const driver = createDriver(<Input error errorMessage="I'm the error message" theme="amaterial" tooltipPlacement={placement}/>);
+          const dataHook = driver.getTooltipDataHook();
+          const wrapper = driver.getTooltipElement();
+          const tooltipDriver = tooltipTestkitFactory({wrapper, dataHook});
+          tooltipDriver.mouseEnter();
+
+          return resolveIn(500).then(() => {
+            expect(tooltipDriver.getPlacement()).toBe(placement);
+          });
+        });
+      });
+    });
+
+    describe('onTooltipShow attribute (only for amaterial theme for now)', () => {
+      it('should be called when error tooltip is active', () => {
+        const onTooltipShow = sinon.spy();
+
+        const driver = createDriver(<Input theme="amaterial" error errorMessage="I'm the error message" onTooltipShow={onTooltipShow}/>);
+        const dataHook = driver.getTooltipDataHook();
+        const wrapper = driver.getTooltipElement();
+        const tooltipDriver = tooltipTestkitFactory({wrapper, dataHook});
+        tooltipDriver.mouseEnter();
+
+        return resolveIn(500).then(() => {
+          expect(onTooltipShow.calledOnce).toBeTruthy();
+        });
+      });
+
+      it('should be called when help tooltip is active (only for amaterial theme for now)', () => {
+        const onTooltipShow = sinon.spy();
+
+        const driver = createDriver(<Input theme="amaterial" help helpMessage="I'm the help message" onTooltipShow={onTooltipShow}/>);
+        const dataHook = driver.getTooltipDataHook();
+        const wrapper = driver.getTooltipElement();
+        const tooltipDriver = tooltipTestkitFactory({wrapper, dataHook});
+        tooltipDriver.mouseEnter();
+
+        return resolveIn(500).then(() => {
+          expect(onTooltipShow.calledOnce).toBeTruthy();
+        });
       });
     });
   });
@@ -298,6 +343,16 @@ describe('Input', () => {
       const driver = createDriver(<Input theme="material"/>);
       expect(driver.isOfStyle('material')).toBeTruthy();
     });
+
+    it('should allow setting the theme to "flat"', () => {
+      const driver = createDriver(<Input theme="flat"/>);
+      expect(driver.isOfStyle('flat')).toBeTruthy();
+    });
+
+    it('should allow setting the theme to "flatdark"', () => {
+      const driver = createDriver(<Input theme="flatdark"/>);
+      expect(driver.isOfStyle('flatdark')).toBeTruthy();
+    });
   });
 
   describe('onClear attribute', () => {
@@ -409,13 +464,9 @@ describe('Input', () => {
 
 describe('testkit', () => {
   it('should exist', () => {
-    const div = document.createElement('div');
     const value = 'hello';
     const onChange = () => {};
-    const dataHook = 'myDataHook';
-    const wrapper = div.appendChild(ReactTestUtils.renderIntoDocument(<div><Input value={value} onChange={onChange} dataHook={dataHook}/></div>));
-    const inputTestkit = inputTestkitFactory({wrapper, dataHook});
-    expect(inputTestkit.exists()).toBeTruthy();
+    expect(isTestkitExists(<Input value={value} onChange={onChange}/>, inputTestkitFactory)).toBe(true);
   });
 });
 
@@ -423,9 +474,6 @@ describe('enzyme testkit', () => {
   it('should exist', () => {
     const value = 'hello';
     const onChange = () => {};
-    const dataHook = 'myDataHook';
-    const wrapper = mount(<Input value={value} onChange={onChange} dataHook={dataHook}/>);
-    const inputTestkit = enzymeInputTestkitFactory({wrapper, dataHook});
-    expect(inputTestkit.exists()).toBeTruthy();
+    expect(isEnzymeTestkitExists(<Input value={value} onChange={onChange}/>, enzymeInputTestkitFactory)).toBe(true);
   });
 });

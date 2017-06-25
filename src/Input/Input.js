@@ -48,6 +48,8 @@ class Input extends Component {
       disabled,
       error,
       width,
+      tooltipPlacement,
+      onTooltipShow
     } = this.props;
 
     const onIconClicked = () => {
@@ -116,15 +118,19 @@ class Input extends Component {
         unit={unit}
         focused={this.state.focus}
         suffix={suffix}
+        tooltipPlacement={tooltipPlacement}
+        onTooltipShow={onTooltipShow}
         /> }
     </div>);
   }
 
   focus = () => {
+    this._onFocus();
     this.input && this.input.focus();
   };
 
   blur = () => {
+    this._onBlur();
     this.input && this.input.blur();
   };
 
@@ -157,14 +163,14 @@ class Input extends Component {
     this.props.onKeyDown && this.props.onKeyDown(e);
 
     if (e.keyCode === 13 /* enter */) {
-      this.props.onEnterPressed && this.props.onEnterPressed();
+      this.props.onEnterPressed && this.props.onEnterPressed(e);
     } else if (e.keyCode === 27 /* esc */) {
-      this.props.onEscapePressed && this.props.onEscapePressed();
+      this.props.onEscapePressed && this.props.onEscapePressed(e);
     }
   };
 
   _onChange = e => {
-    if (this.props.type === 'number' && !(/^\d*$/.test(e.target.value))) {
+    if (this.props.type === 'number' && !(/^[\d.,\-+]*$/.test(e.target.value))) {
       return;
     }
 
@@ -188,7 +194,7 @@ Input.defaultProps = {
 Input.propTypes = {
   id: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  theme: PropTypes.oneOf(['normal', 'paneltitle', 'material', 'amaterial']),
+  theme: PropTypes.oneOf(['normal', 'paneltitle', 'material', 'amaterial', 'flat', 'flatdark']),
   forceHover: PropTypes.bool,
   forceFocus: PropTypes.bool,
   placeholder: PropTypes.string,
@@ -218,18 +224,20 @@ Input.propTypes = {
   suffix: PropTypes.node,
   type: PropTypes.node,
   maxLength: PropTypes.number,
-  errorMessage: PropTypes.string,
+  errorMessage: PropTypes.node,
   roundInput: PropTypes.bool,
   noLeftBorderRadius: PropTypes.string,
   noRightBorderRadius: PropTypes.string,
   help: PropTypes.bool,
   textOverflow: PropTypes.string,
-  helpMessage: PropTypes.string,
+  helpMessage: PropTypes.node,
   title: PropTypes.string,
   width: PropTypes.string,
   ariaLabel: PropTypes.string,
   ariaDescribedby: PropTypes.string,
-  ariaControls: PropTypes.string
+  ariaControls: PropTypes.string,
+  tooltipPlacement: PropTypes.string,
+  onTooltipShow: PropTypes.func
 };
 
 export default Input;

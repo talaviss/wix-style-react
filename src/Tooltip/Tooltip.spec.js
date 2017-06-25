@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import tooltipDriverFactory from './Tooltip.driver';
 import Tooltip from './Tooltip';
 import TooltipContent from './TooltipContent';
@@ -31,6 +31,39 @@ describe('Tooltip', () => {
     return resolveIn(30).then(() => {
       expect(driver.isShown()).toBeTruthy();
     });
+  });
+
+  it('should hide when mouse leaving', () => {
+    const driver = createDriver(<Tooltip {..._props}>{children}</Tooltip>);
+    driver.mouseEnter();
+    expect(driver.isShown()).toBeFalsy();
+    return resolveIn(30).then(() => {
+      expect(driver.isShown()).toBeTruthy();
+      driver.mouseLeave();
+      return resolveIn(30).then(() => {
+        expect(driver.isShown()).toBeFalsy();
+      });
+    });
+  });
+
+  it('should hide tooltip when using custom triggers', () => {
+    const props = {..._props, hideTrigger: 'custom', showTrigger: 'custom'};
+    const driver = createDriver(<Tooltip {...props}>{children}</Tooltip>);
+    driver.mouseEnter();
+    return resolveIn(30)
+      .then(() => {
+        expect(driver.isShown()).toBeFalsy();
+        driver.setProps({...props, active: true});
+        return resolveIn(30);
+      })
+      .then(() => {
+        expect(driver.isShown()).toBeTruthy();
+        driver.setProps({...props, active: false});
+        return resolveIn(30);
+      })
+      .then(() => {
+        expect(driver.isShown()).toBeFalsy();
+      });
   });
 
   it('should test inner component', () => {
@@ -153,6 +186,27 @@ describe('Tooltip', () => {
     });
   });
 
+  describe('placement attribute', () => {
+    it('should be top by default', () => {
+      const driver = createDriver(<Tooltip {...{..._props}}>{children}</Tooltip>);
+      driver.mouseEnter();
+
+      return resolveIn(30).then(() => {
+        expect(driver.getPlacement()).toBe('top');
+      });
+    });
+
+    ['top', 'bottom', 'left', 'right'].forEach(placement => {
+      it(`should be ${placement}`, () => {
+        const driver = createDriver(<Tooltip {...{..._props}} placement={placement}>{children}</Tooltip>);
+        driver.mouseEnter();
+
+        return resolveIn(30).then(() => {
+          expect(driver.getPlacement()).toBe(placement);
+        });
+      });
+    });
+  });
 
   describe('testkit', () => {
     it('should exist', () => {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './Tag.scss';
 import classNames from 'classnames';
 import WixComponent from '../BaseComponents/WixComponent';
+import Typography from '../Typography';
 
 class Tag extends WixComponent {
   render() {
@@ -15,14 +16,18 @@ class Tag extends WixComponent {
       [styles.disabled]: disabled
     });
 
-    const innerClassName = wrap ? styles.innerTagWrap : '';
+    const innerClassName = classNames({
+      [styles.innerTagWrap]: wrap,
+      [Typography.t4]: true
+    });
+
     const title = wrap ? children : '';
 
     return (
       <span className={className} disabled={disabled} id={id} title={title}>
         {thumb && <span className={styles.thumb}>{thumb}</span>}
         <span className={innerClassName}>{children}</span>
-        {removable && <a className={styles.tagRemoveButton} onClick={() => onRemove(id)}/>}
+        {removable && !disabled && <a className={styles.tagRemoveButton} onClick={() => onRemove(id)}/>}
       </span>
     );
   }

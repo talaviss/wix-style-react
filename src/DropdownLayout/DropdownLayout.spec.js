@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import {createDriverFactory} from '../test-common';
 import DropdownLayout from './DropdownLayout';
 import dropdownLayoutDriverFactory from './DropdownLayout.driver';
@@ -174,6 +174,16 @@ describe('DropdownLayout', () => {
     const driver = createDriver(<DropdownLayout visible options={options} selectedId={selectedId}/>);
 
     expect(driver.isOptionSelectedWithGlobalClassName(0)).toBeTruthy();
+  });
+
+  it('should not contain pointer arrow without the withArrow property', () => {
+    const driver = createDriver(<DropdownLayout visible options={options}/>);
+    expect(driver.hasTopArrow()).toBeFalsy();
+  });
+
+  it('should contain pointer arrow when withArrow property is true', () => {
+    const driver = createDriver(<DropdownLayout visible withArrow options={options}/>);
+    expect(driver.hasTopArrow()).toBeTruthy();
   });
 
   describe('testkit', () => {

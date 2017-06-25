@@ -1,28 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import styles from './styles.scss';
-import {DataPickerArrow} from '../../../Icons/dist';
+import {bool, node, string} from 'prop-types';
+import LinkLayout from './LinkLayout';
 
-const Link = ({children, isDiminishedHover, isActive, withArrow, ...rest}) =>
-  <a
-    className={classnames({
-      [styles.link]: true,
-      [styles.linkActive]: isActive,
-      [styles.linkDiminishedHover]: isDiminishedHover
-    })}
-    data-hook="menu-navigation-link"
-    {...rest}
-    >
-    {children}
-    {withArrow && <span className={styles.linkArrow}><DataPickerArrow/></span>}
-  </a>;
+const Link = ({children, isDiminishedHover, isActive, withArrow, badge, dataHook, ...rest}) =>
+  <LinkLayout isDiminishedHover={isDiminishedHover} isActive={isActive} withArrow={withArrow}>
+    <a data-hook={dataHook} {...rest}>
+      {children}
+      {badge}
+    </a>
+  </LinkLayout>;
+
+Link.defaultProps = {
+  dataHook: 'menu-navigation-link'
+};
 
 Link.propTypes = {
-  children: PropTypes.node,
-  isActive: PropTypes.bool,
-  withArrow: PropTypes.bool,
-  isDiminishedHover: PropTypes.bool
+  children: node,
+  isActive: bool,
+  withArrow: bool,
+  badge: node,
+  isDiminishedHover: bool,
+  dataHook: string
 };
 
 export default Link;

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import autoCompleteDriverFactory from './AutoComplete.driver';
 import AutoComplete from './AutoComplete';
 import {createDriverFactory} from '../test-common';
@@ -31,9 +31,17 @@ describe('Autocomplete', () => {
 
   it('should filter items according to predicate function', () => {
     const predicate = option => option.value.toString().toLowerCase().indexOf('a') !== -1;
-    const {driver, dropdownLayoutDriver} = createDriver(<AutoComplete options={options} predicate={predicate}/>);
-    driver.focus();
+    const {inputDriver, dropdownLayoutDriver} = createDriver(<AutoComplete options={options} predicate={predicate}/>);
+    inputDriver.trigger('keyDown', {});
     expect(dropdownLayoutDriver.optionsLength()).toBe(2);
+  });
+
+  it('should show all items when focusing even if some text exist', () => {
+    const predicate = option => option.value.toString().toLowerCase().indexOf('a') !== -1;
+    const {dropdownLayoutDriver, inputDriver} = createDriver(<AutoComplete options={options} predicate={predicate}/>);
+    inputDriver.enterText('aaa');
+    inputDriver.focus();
+    expect(dropdownLayoutDriver.optionsLength()).toBe(options.length);
   });
 
   describe('testkit', () => {

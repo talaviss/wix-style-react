@@ -8,6 +8,8 @@ import position from './TooltipPosition';
 
 import styles from './TooltipContent.scss';
 
+const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
+
 class Tooltip extends WixComponent {
 
   componentElements() {
@@ -69,7 +71,8 @@ class Tooltip extends WixComponent {
      */
     moveArrowTo: PropTypes.number,
     size: PropTypes.oneOf(['normal', 'large']),
-    shouldCloseOnClickOutside: PropTypes.bool
+    shouldCloseOnClickOutside: PropTypes.bool,
+    relative: PropTypes.bool
   };
 
   static defaultProps = {
@@ -89,7 +92,8 @@ class Tooltip extends WixComponent {
     children: null,
     size: 'normal',
     shouldCloseOnClickOutside: false,
-    textAlign: 'center'
+    textAlign: 'center',
+    relative: false
   };
 
   _childNode = null;
@@ -106,15 +110,22 @@ class Tooltip extends WixComponent {
   componentDidUpdate() {
     if (this._mountNode && this.state.visible) {
       const arrowPlacement = {top: 'bottom', left: 'right', right: 'left', bottom: 'top'};
+      const position = this.props.relative ? 'relative' : 'absolute';
       const tooltip = (
         <TooltipContent
           onMouseEnter={() => this._onTooltipContentEnter()}
           onMouseLeave={() => this._onTooltipContentLeave()}
-          ref={ref => this.tooltipContent = ref}
+          ref={ref => {
+            if (this.props.relative) {
+              this.tooltipContent = ref.tooltip;
+            } else {
+              this.tooltipContent = ref;
+            }
+          }}
           theme={this.props.theme}
           bounce={this.props.bounce}
           arrowPlacement={arrowPlacement[this.props.placement]}
-          style={{zIndex: this.props.zIndex}}
+          style={{zIndex: this.props.zIndex, position}}
           arrowStyle={this.state.arrowStyle}
           maxWidth={this.props.maxWidth}
           size={this.props.size}
@@ -123,7 +134,7 @@ class Tooltip extends WixComponent {
           {this.props.content}
         </TooltipContent>);
 
-      ReactDOM.render(tooltip, this._mountNode);
+      renderSubtreeIntoContainer(this, tooltip, this._mountNode);
     }
   }
 
@@ -301,7 +312,8 @@ class Tooltip extends WixComponent {
         placement: this.props.placement,
         alignment: this.props.alignment,
         margin: 10
-      }
+      },
+      this.props.relative
     ));
   }
 
@@ -311,8 +323,13 @@ class Tooltip extends WixComponent {
 
       const style = this._calculatePosition(ref, tooltipNode);
 
-      tooltipNode.style.top = `${style.top}px`;
-      tooltipNode.style.left = `${style.left}px`;
+      if (this.props.relative) {
+        tooltipNode.style.top = `${style.top}px`;
+        tooltipNode.style.left = `${style.left}px`;
+      } else {
+        tooltipNode.style.top = `${style.top}px`;
+        tooltipNode.style.left = `${Math.max(style.left, 0)}px`;
+      }
 
       const arrowStyles = this._adjustArrowPosition(this.props.placement, this.props.moveArrowTo);
       if (Object.keys(arrowStyles).length) {
@@ -363,10 +380,16 @@ class Tooltip extends WixComponent {
   }
 
   _onTooltipContentEnter() {
+    if (this.props.showTrigger === 'custom') {
+      return;
+    }
     this.show();
   }
 
   _onTooltipContentLeave() {
+    if (this.props.hideTrigger === 'custom') {
+      return;
+    }
     this._onMouseLeave();
   }
 

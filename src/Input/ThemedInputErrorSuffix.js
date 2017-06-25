@@ -10,36 +10,58 @@ import {Error} from '../Icons/dist';
 
 import styles from './Input.scss';
 
-const AmaterialErrorSuffix = ({focused, error, errorMessage}) => focused ?
+const placementToMoveBy = {
+  right: {x: 2, y: -10},
+  left: {x: -2, y: -10},
+  top: {x: 0, y: -10},
+  bottom: {x: 0, y: -8},
+};
+
+const AmaterialErrorSuffix = ({focused, error, errorMessage, placement, onShow}) => focused ?
   null : <Tooltip
     dataHook="input-tooltip"
     disabled={!error && !errorMessage}
-    placement="right"
+    placement={placement}
+    maxWidth="250px"
     hideDelay={5}
     showDelay={5}
     active={focused}
-    moveBy={{x: 2, y: -10}}
+    moveBy={placementToMoveBy[placement]}
     alignment="center"
     content={errorMessage}
     overlay=""
+    textAlign="left"
+    onShow={onShow}
     >
     <div className={classNames(styles.errorIcon, styles.suffix)}><Error size="1.5em"/></div>
   </Tooltip>;
 
 AmaterialErrorSuffix.propTypes = {
-  errorMessage: PropTypes.string.isRequired,
+  errorMessage: PropTypes.node.isRequired,
   error: PropTypes.bool,
   focused: PropTypes.bool,
+  placement: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
+  onShow: PropTypes.func
+};
+
+AmaterialErrorSuffix.defaultProps = {
+  placement: 'right'
 };
 
 
 
 class ThemedInputErrorSuffix extends InputErrorSuffix {
   render() {
-    return this.props.theme === 'amaterial' ?
-      <AmaterialErrorSuffix focused={this.props.focused} error={this.props.error} errorMessage={this.props.errorMessage}/> :
+    const {theme, focused, error, errorMessage, tooltipPlacement, onTooltipShow} = this.props;
+    return theme === 'amaterial' ?
+      <AmaterialErrorSuffix focused={focused} error={error} errorMessage={errorMessage} placement={tooltipPlacement} onShow={onTooltipShow}/> :
       super.render();
   }
 }
+
+ThemedInputErrorSuffix.propTypes = {
+  tooltipPlacement: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
+  onTooltipShow: PropTypes.func
+};
 
 export default ThemedInputErrorSuffix;

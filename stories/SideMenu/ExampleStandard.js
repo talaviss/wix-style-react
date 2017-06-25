@@ -20,7 +20,7 @@ export default () =>
       </SideMenu.Header>
 
       <SideMenu.Navigation>
-        <SideMenu.NavigationLink onClick={() => console.log('#1 clicked')}>
+        <SideMenu.NavigationLink onClick={() => console.log('#1 clicked')} href="//wix.com">
           Link #1
         </SideMenu.NavigationLink>
         <SideMenu.NavigationLink withArrow onClick={() => console.log('#2 clicked')}>
@@ -29,7 +29,7 @@ export default () =>
 
         <SideMenu.NavigationSeparator/>
 
-        <SideMenu.NavigationLink isActive onClick={() => console.log('#3 clicked')}>
+        <SideMenu.NavigationLink badge={<SideMenu.NavigationBadge/>} isActive onClick={() => console.log('#3 clicked')}>
           Link #3
         </SideMenu.NavigationLink>
 

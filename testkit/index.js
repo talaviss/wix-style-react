@@ -90,6 +90,9 @@ export const googleAddressWithInputTestkitFactory = testkitFactoryCreator(google
 import richTextAreaCompositeDriverFactory from '../src/RichTextAreaComposite/RichTextAreaComposite.driver';
 export const richTextAreaCompositeTestkitFactory = testkitFactoryCreator(richTextAreaCompositeDriverFactory);
 
+import richTextAreaDriverFactory from '../src/RichTextArea/RichTextArea.driver';
+export const richTextAreaTestkitFactory = testkitFactoryCreator(richTextAreaDriverFactory);
+
 import buttonHeaderDriverFactory from '../src/Card/ButtonHeader/ButtonHeader.driver';
 export const buttonHeaderTestkitFactory = testkitFactoryCreator(buttonHeaderDriverFactory);
 
@@ -122,6 +125,12 @@ export const imageViewerTestkitFactory = testkitFactoryCreator(imageViewerDriver
 
 import textDriverFactory from '../src/Text/Text.driver';
 export const textTestkitFactory = testkitFactoryCreator(textDriverFactory);
+
+import sideMenuDriverFactory from '../src/SideMenu/core/SideMenu.driver';
+export const sideMenuTestkitFactory = testkitFactoryCreator(sideMenuDriverFactory);
+
+import sideMenuDrillDriverFactory from '../src/SideMenu/DrillView/DrillView.driver';
+export const sideMenuDrillTestkitFactory = testkitFactoryCreator(sideMenuDrillDriverFactory);
 
 export {toastTestkitFactory} from '../src/Toast/testkit/Toast';
 

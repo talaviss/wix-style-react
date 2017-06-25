@@ -3,6 +3,7 @@
 
 $gap: 6px;
 $double-gap: 12px;
+$material-gap: 8px;
 
 .root {
     position: relative;
@@ -219,6 +220,7 @@ $double-gap: 12px;
         }
         .input {
             @include FontLight();
+            padding: 0 $material-gap;
         }
         @include ThemeDefault($color: $D10, $borderColor: transparent, $backgroundColor: $D80);
         .bar {
@@ -254,6 +256,32 @@ $double-gap: 12px;
                 }
             }
         }
+    }
+
+    &-flat {
+        border: none;
+        border-radius: 0;
+
+        &.size-large { @include Size($height: 54px, $fontSize: 20px); }
+       
+        &:hover, &.hasFocus { @include ThemeFlat($B20); }
+        &:active            { @include ThemeFlat($B10); }
+        &.disabled          { @include ThemeFlat($D50); }
+
+        @include ThemeFlat($D20);
+    }
+
+    &-flatdark {
+        border: none;
+        border-radius: 0;
+
+        &.size-large { @include Size($height: 54px, $fontSize: 20px); }
+        
+        &:hover, &.hasFocus { @include ThemeFlat($B20); }
+        &:active            { @include ThemeFlat($B10); }
+        &.disabled          { @include ThemeFlat($D50); }
+
+        @include ThemeFlat($D80);
     }
 }
 
@@ -363,6 +391,12 @@ $double-gap: 12px;
     &[disabled] {
         path { fill: $GR40; }
         line { stroke: $GR40; }
+    }
+}
+
+.roundInput {
+    .menu-arrow {
+        padding: 0 $double-gap;
     }
 }
 
