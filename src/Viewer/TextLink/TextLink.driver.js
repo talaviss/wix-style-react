@@ -1,4 +1,4 @@
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import textLinkDriverFactory from '../../BaseComponents/TextLink/TextLink.driver';
 
 const viewerTextLinkDriverFactory = ({element, wrapper, component}) => {
