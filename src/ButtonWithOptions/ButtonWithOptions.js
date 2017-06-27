@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WixComponent from '../WixComponent';
+import WixComponent from '../BaseComponents/WixComponent';
 import omit from 'lodash.omit';
 import DropdownLayout from '../DropdownLayout/DropdownLayout';
-import Button from '../Button/Button';
+import Button from '../Button';
 
 class ButtonWithOptions extends WixComponent {
   // Abstraction

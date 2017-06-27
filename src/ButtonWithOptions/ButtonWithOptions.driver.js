@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
-import buttonDriverFactory from '../Button/Button.driver';
+import buttonDriverFactory from '../Backoffice/Button/Button.driver.js';
 import dropdownLayoutDriverFactory from '../DropdownLayout/DropdownLayout.driver';
 import ReactDOM from 'react-dom';
 
