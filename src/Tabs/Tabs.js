@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import WixComponent from '../WixComponent';
+import WixComponent from '../BaseComponents/WixComponent';
 import styles from './Tabs.scss';
 
 class Tabs extends WixComponent {
@@ -39,7 +39,10 @@ Tabs.propTypes = {
       PropTypes.string,
       PropTypes.number
     ]),
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element
+    ]).isRequired
   })).isRequired,
   onClick: PropTypes.func,
   activeId: PropTypes.oneOfType([
