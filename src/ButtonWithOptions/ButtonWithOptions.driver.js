@@ -12,7 +12,7 @@ const ButtonWithOptionsDriverFactory = ({element, wrapper, component}) => {
 
   const driver = {
     exists: () => !!element,
-    inputWrapper: () => buttonWrapper,
+    buttonWrapper: () => buttonWrapper,
     click: () => buttonDriver.click(),
     pressDownKey: () => ReactTestUtils.Simulate.keyDown(buttonWrapper, {key: 'ArrowDown'}),
     pressUpKey: () => ReactTestUtils.Simulate.keyDown(buttonWrapper, {key: 'ArrowUp'}),

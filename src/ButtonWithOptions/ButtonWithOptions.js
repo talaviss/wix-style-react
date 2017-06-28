@@ -17,7 +17,6 @@ class ButtonWithOptions extends WixComponent {
     super(props);
     this.state = {
       showOptions: false,
-      lastOptionsShow: 0,
     };
 
     this._onSelect = this._onSelect.bind(this);
@@ -34,18 +33,12 @@ class ButtonWithOptions extends WixComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.buttonElement = nextProps.children.find(element => element.type === ButtonWithOptions.Button);
-    this.optionsElement = nextProps.children.filter(element => element.type !== ButtonWithOptions.Button);
-  }
-
   onClickOutside() {
     this.hideOptions();
   }
 
   renderButton() {
-    const buttonElement = this.buttonElement;
-    return React.cloneElement(buttonElement, {
+    return React.cloneElement(this.buttonElement, {
       onClick: this.showOptions
     });
   }
@@ -95,7 +88,7 @@ class ButtonWithOptions extends WixComponent {
   }
 
   showOptions() {
-    this.setState({showOptions: true, lastOptionsShow: Date.now()});
+    this.setState({showOptions: true});
   }
 
   closeOnSelect() {
@@ -145,7 +138,6 @@ ButtonWithOptions.defaultProps = {
   options: [],
   closeOnSelect: true,
   valueParser: option => option.value,
-  dropdownWidth: null,
   dropdownOffsetLeft: '0'
 };
 
