@@ -71,6 +71,7 @@ class ButtonWithOptions extends WixComponent {
           visible={this.state.showOptions}
           onClose={this.hideOptions}
           onSelect={this._onSelect}
+          onClickOutside={this.hideOptions}
           />
       </div>
     );
