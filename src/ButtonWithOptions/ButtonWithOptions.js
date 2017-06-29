@@ -28,9 +28,17 @@ class ButtonWithOptions extends WixComponent {
     this.closeOnSelect = this.closeOnSelect.bind(this);
 
     if (props.children) {
-      this.buttonElement = props.children.find(element => element.type === ButtonWithOptions.Button);
-      this.optionsElement = props.children.filter(element => element.type !== ButtonWithOptions.Button);
+      this.sortChildren(props);
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.sortChildren(nextProps);
+  }
+
+  sortChildren(props) {
+    this.buttonElement = props.children.find(element => element.type === ButtonWithOptions.Button);
+    this.optionsElement = props.children.filter(element => element.type !== ButtonWithOptions.Button);
   }
 
   onClickOutside() {
@@ -71,9 +79,11 @@ class ButtonWithOptions extends WixComponent {
   }
 
   render() {
-    const {dropDirectionUp} = this.props;
+    const {dropDirectionUp, style} = this.props;
+    const sizeRestrictionStyles = this.props.restrainDropdownSize ? {display: 'inline-block'} : {};
+    const customStyle = Object.assign({}, sizeRestrictionStyles, style);
     return (
-      <div>
+      <div style={customStyle}>
         {dropDirectionUp ? this._renderDropdownLayout() : null}
         <div onKeyDown={this._onKeyDown} onFocus={this._onFocus}>
           {this.renderButton()}
@@ -138,7 +148,8 @@ ButtonWithOptions.defaultProps = {
   options: [],
   closeOnSelect: true,
   valueParser: option => option.value,
-  dropdownOffsetLeft: '0'
+  dropdownOffsetLeft: '0',
+  restrainDropdownSize: true
 };
 
 ButtonWithOptions.propTypes = {
@@ -147,6 +158,7 @@ ButtonWithOptions.propTypes = {
   valueParser: PropTypes.func,
   dropdownWidth: PropTypes.string,
   dropdownOffsetLeft: PropTypes.string,
+  restrainDropdownSize: PropTypes.bool,
   children: PropTypes.arrayOf((propValue, key) => {
     if (propValue[key].type === ButtonWithOptions.Button) {
       propValue.forEach((child, anotherKey) => {
@@ -165,7 +177,14 @@ ButtonWithOptions.propTypes = {
   }),
 };
 
-ButtonWithOptions.Option = () => null;
-ButtonWithOptions.Button = Button;
+ButtonWithOptions.Option = function () {
+  return null;
+};
+ButtonWithOptions.Option.displayName = 'ButtonWithOptions.Option';
+
+ButtonWithOptions.Button = function (props) {
+  return <Button {...props}/>;
+};
+ButtonWithOptions.Button.displayName = 'ButtonWithOptions.Button';
 
 export default ButtonWithOptions;
