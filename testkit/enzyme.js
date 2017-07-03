@@ -1,4 +1,4 @@
-import {enzymeTestkitFactoryCreator} from '../src/test-common';
+import {enzymeTestkitFactoryCreator, nativeEnzymeTestkitFactoryCreator} from '../src/test-common';
 
 import buttonSelectionDriverFactory from '../src/ButtonSelection/ButtonSelection.driver';
 export const buttonSelectionTestkitFactory = enzymeTestkitFactoryCreator(buttonSelectionDriverFactory);
@@ -142,3 +142,6 @@ export const sideMenuTestkitFactory = enzymeTestkitFactoryCreator(sideMenuDriver
 
 import sideMenuDrillDriverFactory from '../src/SideMenu/DrillView/DrillView.driver';
 export const sideMenuDrillTestkitFactory = enzymeTestkitFactoryCreator(sideMenuDrillDriverFactory);
+
+import tpaButtonDriverFactory from '../src/TPA/Button/Button.driver';
+export const tpaButtonTestkitFactory = nativeEnzymeTestkitFactoryCreator(tpaButtonDriverFactory, true);

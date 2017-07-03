@@ -46,11 +46,14 @@ function loadStories() {
   // require('../stories/BackOffice/TextLink');
 
   //Viewer
-  require('../stories/Viewer/Button');
-  require('../stories/Viewer/TextLink');
-  require('../stories/ViewerSnippet/TextLink/CompositeStory');
-  require('../stories/Viewer/Divider');
-  require('../stories/ViewerSnippet/Divider/CompositeStory');
+  // require('../stories/Viewer/Button');
+  // require('../stories/Viewer/TextLink');
+  // require('../stories/ViewerSnippet/TextLink/CompositeStory');
+  // require('../stories/Viewer/Divider');
+  // require('../stories/ViewerSnippet/Divider/CompositeStory');
+
+  //TPA
+  require('../stories/TPA/Button');
 
   // Common
   require('../stories/Composite');
