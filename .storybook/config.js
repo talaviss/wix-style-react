@@ -37,20 +37,12 @@ function loadStories() {
   require('../stories/Slider');
   require('../stories/Tag');
   require('../stories/TimeInput');
-  // require('../stories/Toast'); DEPRECATED
   require('../stories/ToggleSwitch');
   require('../stories/Tooltip/Core');
 
   //BackOffice
   require('../stories/BackOffice/Button');
-  // require('../stories/BackOffice/TextLink');
-
-  //Viewer
-  // require('../stories/Viewer/Button');
-  // require('../stories/Viewer/TextLink');
-  // require('../stories/ViewerSnippet/TextLink/CompositeStory');
-  // require('../stories/Viewer/Divider');
-  // require('../stories/ViewerSnippet/Divider/CompositeStory');
+  require('../stories/BackOffice/TextLink');
 
   //TPA
   require('../stories/TPA/Button');
