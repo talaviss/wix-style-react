@@ -42,7 +42,7 @@ function loadStories() {
 
   //BackOffice
   require('../stories/Backoffice/Button');
-  require('../stories/Backoffice/TextLink');
+  require('../stories/Backoffice/TextLink'); 
 
   //TPA
   require('../stories/TPA/Button');
